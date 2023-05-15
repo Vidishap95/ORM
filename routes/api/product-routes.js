@@ -68,11 +68,7 @@ router.post('/', (req, res) => {
 router.put('/:id', async(req, res) => {
   // update product data
   try {
-    await Product.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
-    })
+    await Product.update(req.body, {where: {id: req.params.id } });
       //.then((product) => {
         // find all associated tags from ProductTag
         if (req.body.tags && req.body.tags.length > 0) {
@@ -100,16 +96,17 @@ router.put('/:id', async(req, res) => {
           ProductTag.destroy({ where: { id: productTagsToRemove } }),
           ProductTag.bulkCreate(newProductTags),
         ]);
+      }
       
     
       const product = await Product.findByPk(req.params.id, {
         include: [{ model: Tag}] });
       return res.json(product);
-      } catch (error) {
+  } catch (error) {
         console.log(error);
         return res.status(400).json(err);
     
-    }
+    };
   });
   
 
